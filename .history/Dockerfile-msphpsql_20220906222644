@@ -57,10 +57,7 @@ RUN mkdir -p /REPO/msphpsql-dev
 RUN mkdir -p /REPO/msphpsql-dev/pdo_sqlsrv
 RUN mkdir -p /REPO/msphpsql-dev/shared
 RUN mkdir -p /REPO/msphpsql-dev/sqlsrv
-COPY source/pdo_sqlsrv/ /REPO/msphpsql-dev/pdo_sqlsrv/
-COPY source/shared/ /REPO/msphpsql-dev/shared/
-COPY source/sqlsrv /REPO/msphpsql-dev/sqlsrv/
-
+COPY sorce/ /REPO/msphpsql-dev/
 WORKDIR /REPO/msphpsql-dev/ 
 
 RUN chmod +x /REPO/msphpsql-dev/packagize.sh

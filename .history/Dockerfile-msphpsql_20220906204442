@@ -45,26 +45,17 @@ RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && ACCEPT_EULA=Y apt
 ENV PATH="/opt/mssql-tools/bin:${PATH}"	
 
 #install coveralls
-#RUN python -m pip install --upgrade pip && pip install cpp-coveralls
-RUN python -m pip install 
-#RUN pip install --upgrade pip
-#RUN pip install cpp-coveralls
+RUN python -m pip install --upgrade pip && pip install cpp-coveralls
 
 #Either Install git / download zip (One can see other strategies : https://ryanfb.github.io/etc/2015/07/29/git_strategies_for_docker.html )
 #One option is to get source from zip file of repository.
 #another option is to copy source to build directory on image
-RUN mkdir -p /REPO/msphpsql-dev
-RUN mkdir -p /REPO/msphpsql-dev/pdo_sqlsrv
-RUN mkdir -p /REPO/msphpsql-dev/shared
-RUN mkdir -p /REPO/msphpsql-dev/sqlsrv
-COPY source/pdo_sqlsrv/ /REPO/msphpsql-dev/pdo_sqlsrv/
-COPY source/shared/ /REPO/msphpsql-dev/shared/
-COPY source/sqlsrv /REPO/msphpsql-dev/sqlsrv/
+RUN mkdir -p $PHPSQLDIR
+COPY . $PHPSQLDIR
+WORKDIR $PHPSQLDIR/source/ 
 
-WORKDIR /REPO/msphpsql-dev/ 
-
-RUN chmod +x /REPO/msphpsql-dev/packagize.sh
-RUN /bin/bash -c "/REPO/msphpsql-dev/packagize.sh"
+RUN chmod +x ./packagize.sh
+RUN /bin/bash -c "./packagize.sh"
 
 RUN echo "extension = pdo_sqlsrv.so" >> /etc/php/7.0/cli/conf.d/20-pdo_sqlsrv.ini
 RUN echo "extension = sqlsrv.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
